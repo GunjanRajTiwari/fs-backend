@@ -1,0 +1,23 @@
+{
+  "name": "fs-backend",
+  "version": "1.0.0",
+  "description": "Backend of Fourspace",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GunjanRajTiwari/fs-backend.git"
+  },
+  "author": "Dimag Laga Pasa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GunjanRajTiwari/fs-backend/issues"
+  },
+  "homepage": "https://github.com/GunjanRajTiwari/fs-backend#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sequelize": "^6.25.6"
+  }
+}
