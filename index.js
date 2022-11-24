@@ -4,6 +4,7 @@ const cors = require("cors");
 const passport = require("passport");
 const runCode = require("./utils/runCode");
 const authRoute = require("./routes/auth");
+const db = require("./models");
 require("./utils/auth");
 
 const app = express();
@@ -26,11 +27,25 @@ app.use(
 	})
 );
 
+// const sequalize = new Sequalize(
+// 	process.env.DB_NAME,
+// 	process.env.DB_USERNAME,
+// 	process.env.DB_PASSWORD,
+// 	{
+// 		dialect: "mysql",
+// 	}
+// );
+
+// ... Routes
 app.use("/auth", authRoute);
+
 app.get("/", (req, res) => {
 	res.send("Welcome to Fourspace API");
 });
 
-app.listen(8080, () => {
-	console.log("Server running on 8080 ...");
+db.sequelize.sync().then(() => {
+	console.log("Database synced ...");
+	app.listen(8080, () => {
+		console.log("Server running on 8080 ...");
+	});
 });
