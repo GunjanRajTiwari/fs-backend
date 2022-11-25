@@ -17,8 +17,16 @@ module.exports = (sequalize, DataTypes) => {
 			allowNull: false,
 		},
 		time: {
-			type: DataTypes.Integer(4),
+			type: DataTypes.INTEGER(4),
 			allowNull: false,
+		},
+		code: {
+			type: DataTypes.TEXT,
+			allowNull: false,
+		},
+		inContest: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
 		},
 	});
 

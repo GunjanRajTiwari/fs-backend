@@ -1,5 +1,5 @@
 module.exports = (sequalize, DataTypes) => {
-	const Question = sequalize.define("Question", {
+	const Problem = sequalize.define("Problem", {
 		title: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -21,5 +21,5 @@ module.exports = (sequalize, DataTypes) => {
 		},
 	});
 
-	return Question;
+	return Problem;
 };
