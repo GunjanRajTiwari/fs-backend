@@ -5,6 +5,7 @@ const passport = require("passport");
 const runCode = require("./utils/runCode");
 const authRoute = require("./routes/auth");
 const db = require("./models");
+const { checkLogin } = require("./middlewares/auth");
 require("./utils/auth");
 
 const app = express();
@@ -27,20 +28,15 @@ app.use(
 	})
 );
 
-// const sequalize = new Sequalize(
-// 	process.env.DB_NAME,
-// 	process.env.DB_USERNAME,
-// 	process.env.DB_PASSWORD,
-// 	{
-// 		dialect: "mysql",
-// 	}
-// );
-
 // ... Routes
 app.use("/auth", authRoute);
+// app.use("/user", userRoute);
+// app.use("/contests", contestRoute);
+// app.use("/problems", problemRoute);
+// app.use("/sollutions", sollutionRoute);
 
-app.get("/", (req, res) => {
-	res.send("Welcome to Fourspace API");
+app.get("/", checkLogin, (req, res) => {
+	res.send(req.user);
 });
 
 db.sequelize.sync().then(() => {

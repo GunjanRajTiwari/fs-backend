@@ -1,7 +1,7 @@
 module.exports = (sequalize, DataTypes) => {
 	const User = sequalize.define("User", {
 		username: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(63),
 			allowNull: false,
 			unique: true,
 		},
@@ -17,6 +17,18 @@ module.exports = (sequalize, DataTypes) => {
 		avatar: {
 			type: DataTypes.STRING,
 			defaultValue: "./avatar.jpg",
+		},
+		rank: {
+			type: DataTypes.ENUM(
+				"ROOKIE",
+				"VETERAN",
+				"ELITE",
+				"PRO",
+				"MASTER",
+				"GRANDMASTER",
+				"LEGENDARY"
+			),
+			defaultValue: "ROOKIE",
 		},
 	});
 
