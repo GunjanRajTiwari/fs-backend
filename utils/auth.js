@@ -15,6 +15,7 @@ passport.use(
 			callbackURL: "http://localhost:8080/auth/google/callback",
 		},
 		async function (accessToken, refreshToken, profile, done) {
+			console.log(profile);
 			try {
 				const [user, created] = await User.findOrCreate({
 					where: {

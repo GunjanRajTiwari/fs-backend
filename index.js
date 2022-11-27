@@ -4,6 +4,7 @@ const cors = require("cors");
 const passport = require("passport");
 const runCode = require("./utils/runCode");
 const authRoute = require("./routes/auth");
+const userRoute = require("./routes/user");
 const db = require("./models");
 const { checkLogin } = require("./middlewares/auth");
 require("./utils/auth");
@@ -30,7 +31,7 @@ app.use(
 
 // ... Routes
 app.use("/auth", authRoute);
-// app.use("/user", userRoute);
+app.use("/user", userRoute);
 // app.use("/contests", contestRoute);
 // app.use("/problems", problemRoute);
 // app.use("/sollutions", sollutionRoute);

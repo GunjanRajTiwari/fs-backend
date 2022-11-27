@@ -30,6 +30,10 @@ module.exports = (sequalize, DataTypes) => {
 			),
 			defaultValue: "ROOKIE",
 		},
+		rating: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+		},
 	});
 
 	return User;

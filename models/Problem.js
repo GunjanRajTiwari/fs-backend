@@ -15,6 +15,10 @@ module.exports = (sequalize, DataTypes) => {
 			type: DataTypes.TEXT,
 			allowNull: false,
 		},
+		checkerLang: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		status: {
 			type: DataTypes.ENUM("HIDDEN", "LIVE", "PRACTICE"),
 			allowNull: false,
