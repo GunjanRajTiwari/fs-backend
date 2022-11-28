@@ -11,8 +11,8 @@ module.exports = (sequalize, DataTypes) => {
 			type: DataTypes.DATE,
 			allowNull: false,
 		},
-		duration: {
-			type: DataTypes.INTEGER(4),
+		end: {
+			type: DataTypes.DATE,
 			allowNull: false,
 		},
 		type: {
@@ -20,6 +20,11 @@ module.exports = (sequalize, DataTypes) => {
 			allowNull: false,
 		},
 	});
+
+	Contest.associate = ({ User, Problem }) => {
+		Contest.belongsToMany(User, { through: "Register" });
+		Contest.hasMany(Problem);
+	};
 
 	return Contest;
 };

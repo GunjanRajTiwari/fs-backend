@@ -49,19 +49,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// Associations
-const { User, Contest, Problem, Register, Solution } = db;
-
-User.belongsToMany(Contest, { through: "Register" });
-Contest.belongsToMany(User, { through: "Register" });
-
-User.hasMany(Solution);
-Solution.belongsTo(User);
-
-Contest.hasMany(Problem);
-Problem.belongsTo(Contest);
-
-Problem.hasMany(Solution);
-Solution.belongsTo(Problem);
-
 module.exports = db;

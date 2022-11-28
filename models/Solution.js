@@ -30,5 +30,10 @@ module.exports = (sequalize, DataTypes) => {
 		},
 	});
 
+	Solution.associate = ({ User, Problem }) => {
+		Solution.belongsTo(User);
+		Solution.belongsTo(Problem);
+	};
+
 	return Solution;
 };

@@ -25,5 +25,10 @@ module.exports = (sequalize, DataTypes) => {
 		},
 	});
 
+	Problem.associate = ({ Contest, Solution }) => {
+		Problem.belongsTo(Contest);
+		Problem.hasMany(Solution);
+	};
+
 	return Problem;
 };

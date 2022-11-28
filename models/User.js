@@ -36,5 +36,10 @@ module.exports = (sequalize, DataTypes) => {
 		},
 	});
 
+	User.associate = ({ Contest, Solution }) => {
+		User.belongsToMany(Contest, { through: "Register" });
+		User.hasMany(Solution);
+	};
+
 	return User;
 };
