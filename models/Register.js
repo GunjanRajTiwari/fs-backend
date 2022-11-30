@@ -22,5 +22,10 @@ module.exports = (sequalize, DataTypes) => {
 		},
 	});
 
+	Register.associate = ({ User, Contest }) => {
+		Register.belongsTo(User);
+		Register.belongsTo(Contest);
+	};
+
 	return Register;
 };

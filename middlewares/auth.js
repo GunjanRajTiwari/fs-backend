@@ -11,7 +11,9 @@ const checkAdmin = (req, res, next) => {
 	if (!req.user) {
 		return res.status(401).send({ error: "Unauthorized" });
 	}
-	if (!admins.includes(req.user.email)) next();
+	if (!admins.includes(req.user.email))
+		res.send({ error: "Unauthorized" });
+	next();
 };
 
 module.exports = { checkAdmin, checkLogin };

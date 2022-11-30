@@ -2,12 +2,18 @@ const cookieSession = require("cookie-session");
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const runCode = require("./utils/runCode");
+const AdminBro = require("admin-bro");
+const AdminBroSequelize = require("@admin-bro/sequelize");
+const AdminBroExpress = require("@admin-bro/express");
+
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const contestRoute = require("./routes/contest");
+const problemRoute = require("./routes/problem");
+
 const db = require("./models");
-const { checkLogin } = require("./middlewares/auth");
+
+const { checkLogin, checkAdmin } = require("./middlewares/auth");
 require("./utils/auth");
 
 const app = express();
@@ -32,9 +38,9 @@ app.use(
 
 // ... Routes
 app.use("/auth", authRoute);
-app.use("/user", userRoute);
-app.use("/contests", contestRoute);
-// app.use("/problems", problemRoute);
+app.use("/api/user", userRoute);
+app.use("/api/contests", contestRoute);
+app.use("/api/problems", problemRoute);
 // app.use("/sollutions", sollutionRoute);
 
 app.get("/", checkLogin, (req, res) => {
@@ -45,5 +51,21 @@ db.sequelize.sync().then(() => {
 	console.log("Database synced ...");
 	app.listen(8080, () => {
 		console.log("Server running on 8080 ...");
+
+		AdminBro.registerAdapter(AdminBroSequelize);
+		const adminBro = new AdminBro({
+			rootPath: "/admin",
+			resources: [
+				{ resource: db.Contest },
+				{ resource: db.Problem },
+			],
+			branding: {
+				companyName: "Four Space",
+			},
+		});
+
+		const adminRouter = AdminBroExpress.buildRouter(adminBro);
+
+		app.use(adminBro.options.rootPath, checkAdmin, adminRouter);
 	});
 });

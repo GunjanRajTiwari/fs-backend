@@ -1,5 +1,9 @@
+const problemController = require("../controllers/problemController");
+
 const router = require("express").Router();
 
-router.get("/problems/:id", viewProblem);
-router.get("/problems/:id", viewProblem);
-router.get("/problems/:id/submissions", getProblemSubmissions);
+router.get("/", problemController.getAllProblems);
+router.get("/:id", problemController.getProblem);
+router.get("/:id/submit", problemController.submit);
+
+module.exports = router;

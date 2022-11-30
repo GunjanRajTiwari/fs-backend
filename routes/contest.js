@@ -7,6 +7,6 @@ router.get("/past", contestController.getPastContests);
 router.get("/:id", checkLogin, contestController.getContest);
 // router.get("/:id", viewContest);
 router.get("/:id/register", checkLogin, contestController.register);
-// router.get("/:id/leaderboard", getContestLeaderboard);
+router.get("/:id/leaderboard", contestController.getLeaderboard);
 
 module.exports = router;

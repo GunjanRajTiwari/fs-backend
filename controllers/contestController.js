@@ -1,4 +1,11 @@
-const { Register, Contest, Problem, Sequelize } = require("../models");
+const {
+	Register,
+	Contest,
+	Problem,
+	Sequelize,
+	User,
+	sequelize,
+} = require("../models");
 const { Op } = Sequelize;
 
 const addContest = (req, res) => {};
@@ -106,6 +113,49 @@ const register = async (req, res) => {
 	}
 };
 
+const getLeaderboard = async (req, res) => {
+	try {
+		const contestId = req.params.id;
+		var leaderboard = await Register.findAll({
+			where: {
+				ContestId: contestId,
+				score: {
+					[Op.gt]: 0,
+				},
+			},
+			include: [
+				{
+					model: User,
+					attributes: ["username", "name"],
+				},
+			],
+			attributes: {
+				include: [
+					[
+						Sequelize.literal(
+							"(RANK() OVER (ORDER BY score DESC, timePenalty))"
+						),
+						"rank",
+					],
+				],
+			},
+			order: [
+				["score", "DESC"],
+				["timePenalty", "ASC"],
+				["solved", "DESC"],
+			],
+		});
+
+		var me = leaderboard.find(
+			user => user.User.username === req.user.username
+		);
+
+		res.send({ data: { me, leaderboard } });
+	} catch (error) {
+		res.send({ error });
+	}
+};
+
 module.exports = {
 	getNewContests,
 	getPastContests,
@@ -116,4 +166,5 @@ module.exports = {
 	addProblem,
 	getProblems,
 	register,
+	getLeaderboard,
 };
