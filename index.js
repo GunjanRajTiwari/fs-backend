@@ -1,3 +1,4 @@
+const path = require("path");
 const cookieSession = require("cookie-session");
 const express = require("express");
 const cors = require("cors");
@@ -27,6 +28,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static("build"));
 
 app.use(
 	cors({
@@ -43,14 +45,46 @@ app.use("/api/contests", contestRoute);
 app.use("/api/problems", problemRoute);
 // app.use("/sollutions", sollutionRoute);
 
-app.get("/", checkLogin, (req, res) => {
-	res.send(req.user);
+app.get("/api/leaderboard", async (req, res) => {
+	try {
+		// const page = req.query.page;
+		// if (!page) page = 1;
+		const leaderboard = await db.User.findAll({
+			attributes: [
+				"username",
+				"name",
+				"rank",
+				"rating",
+				[
+					db.Sequelize.literal(
+						"(RANK() OVER (ORDER BY rating DESC))"
+					),
+					"place",
+				],
+			],
+			order: [
+				["rating", "DESC"],
+				["createdAt", "ASC"],
+			],
+		});
+
+		if (!req.user) return res.send({ data: { leaderboard } });
+
+		const me = leaderboard.find(
+			user => user.username === req.user.username
+		);
+
+		res.send({ data: { me, leaderboard } });
+	} catch (error) {
+		res.send({ error });
+	}
 });
 
+const port = process.env.PORT || 8080;
 db.sequelize.sync().then(() => {
 	console.log("Database synced ...");
-	app.listen(8080, () => {
-		console.log("Server running on 8080 ...");
+	app.listen(port, () => {
+		console.log("Server running ...");
 
 		AdminBro.registerAdapter(AdminBroSequelize);
 		const adminBro = new AdminBro({
@@ -68,4 +102,8 @@ db.sequelize.sync().then(() => {
 
 		app.use(adminBro.options.rootPath, checkAdmin, adminRouter);
 	});
+});
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "build"));
 });

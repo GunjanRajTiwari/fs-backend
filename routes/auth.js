@@ -1,7 +1,7 @@
 const passport = require("passport");
 
 const router = require("express").Router();
-const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "/";
 
 router.get(
 	"/google",

@@ -23,6 +23,10 @@ module.exports = (sequalize, DataTypes) => {
 			type: DataTypes.ENUM("HIDDEN", "LIVE", "PRACTICE"),
 			allowNull: false,
 		},
+		point: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+		},
 	});
 
 	Problem.associate = ({ Contest, Solution }) => {

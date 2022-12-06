@@ -46,6 +46,17 @@ const getContest = async (req, res) => {
 	try {
 		var contest = await Contest.findOne({
 			where: { id: contestId },
+			include: [
+				{
+					model: Problem,
+					attributes: ["id", "title", "point"],
+					where: {
+						status: {
+							[Op.or]: ["LIVE", "PRACTICE"],
+						},
+					},
+				},
+			],
 		});
 
 		if (!contest) return res.send({ error: "Contest not found!" });
@@ -126,7 +137,7 @@ const getLeaderboard = async (req, res) => {
 			include: [
 				{
 					model: User,
-					attributes: ["username", "name"],
+					attributes: ["username", "name", "rank"],
 				},
 			],
 			attributes: {
