@@ -89,10 +89,10 @@ db.sequelize.sync().then(() => {
 		AdminBro.registerAdapter(AdminBroSequelize);
 		const adminBro = new AdminBro({
 			rootPath: "/admin",
-			resources: [
-				{ resource: db.Contest },
-				{ resource: db.Problem },
-			],
+			// resources: [
+			// 	{ resource: db.Contest },
+			// 	{ resource: db.Problem },
+			// ],
 			branding: {
 				companyName: "Four Space",
 			},
