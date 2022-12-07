@@ -89,12 +89,16 @@ db.sequelize.sync().then(() => {
 		AdminBro.registerAdapter(AdminBroSequelize);
 		const adminBro = new AdminBro({
 			rootPath: "/admin",
-			// resources: [
-			// 	{ resource: db.Contest },
-			// 	{ resource: db.Problem },
-			// ],
+			resources: [
+				{ resource: db.Contest },
+				{ resource: db.Problem },
+				{ resource: db.User },
+				{ resource: db.Register },
+				{ resource: db.Solution },
+			],
 			branding: {
 				companyName: "Four Space",
+				logo: "/logo.png",
 			},
 		});
 
