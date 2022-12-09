@@ -46,23 +46,12 @@ const getContest = async (req, res) => {
 	try {
 		var contest = await Contest.findOne({
 			where: { id: contestId },
-			include: [
-				{
-					model: Problem,
-					attributes: ["id", "title", "point"],
-					where: {
-						status: {
-							[Op.or]: ["LIVE", "PRACTICE"],
-						},
-					},
-				},
-			],
 		});
 
 		if (!contest) return res.send({ error: "Contest not found!" });
 
 		const now = new Date();
-		contest.dataValues.running =
+		contest.dataValues.started =
 			now >= contest.start && now <= contest.end;
 
 		const registration = await Register.count({
@@ -74,15 +63,25 @@ const getContest = async (req, res) => {
 
 		contest.dataValues.registered = !!registration;
 
-		if (!contest.dataValues.running)
+		if (
+			!contest.dataValues.registered ||
+			!contest.dataValues.started
+		) {
 			return res.send({ data: contest });
+		}
+		console.log("reached");
 
 		const problems = await Problem.findAll({
 			where: {
-				contestId: contest.id,
+				ContestId: contest.id,
+				status: {
+					[Op.or]: ["LIVE", "PRACTICE"],
+				},
 			},
+			attributes: ["id", "title", "point"],
 		});
-		contest.dataValues.problems = problems;
+
+		contest.dataValues.Problems = problems;
 		res.send({ data: contest });
 	} catch (error) {
 		res.send({ error });

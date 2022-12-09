@@ -1,4 +1,4 @@
-const { User, Contest } = require("../models");
+const { User, Contest, Register } = require("../models");
 
 const getProfile = async (req, res) => {
 	const username = req.params.username;
@@ -13,7 +13,12 @@ const getProfile = async (req, res) => {
 				"rank",
 				"avatar",
 			],
-			include: Contest,
+			include: [
+				{
+					model: Contest,
+					attributes: ["id", "title", "start"],
+				},
+			],
 		});
 		res.send({ data: profile });
 	} catch (error) {
