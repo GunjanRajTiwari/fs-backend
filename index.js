@@ -105,9 +105,8 @@ db.sequelize.sync().then(() => {
 		const adminRouter = AdminBroExpress.buildRouter(adminBro);
 
 		app.use(adminBro.options.rootPath, checkAdmin, adminRouter);
+		app.get("/*", (req, res) => {
+			res.sendFile(path.join(__dirname, "build", "index.html"));
+		});
 	});
-});
-
-app.get("/*", (req, res) => {
-	res.sendFile(path.join(__dirname, "build", "index.html"));
 });
