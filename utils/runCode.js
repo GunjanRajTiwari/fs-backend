@@ -4,24 +4,21 @@ const runCode = async (code, language, input) => {
 	try {
 		var apiOutput = await axios({
 			method: "post",
-			url: "https://codex-api.herokuapp.com/",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept-Encoding": "application/json",
+			},
+			url: "https://codex-api-prod-fourspace-orw7so.mo2.mogenius.io/",
 			data: {
 				code,
 				language,
 				input,
 			},
 		});
-		// if (apiOutput.data.output.indexOf("Execution Timed Out!") !== -1) {
-		// 	return {
-		// 		status: 0,
-		// 		error: "Time Limit Exceeded!",
-		// 	};
-		// } else {
 		return {
 			status: 1,
-			result: apiOutput,
+			result: apiOutput.data,
 		};
-		// }
 	} catch (e) {
 		return { status: 0, error: e };
 	}

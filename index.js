@@ -18,6 +18,7 @@ const { checkLogin, checkAdmin } = require("./middlewares/auth");
 require("./utils/auth");
 
 const app = express();
+app.use(express.json());
 app.use(
 	cookieSession({
 		name: "session",

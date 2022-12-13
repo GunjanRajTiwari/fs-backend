@@ -1,4 +1,10 @@
-const { Problem, Register, Solution } = require("../models");
+const {
+	Problem,
+	Register,
+	Solution,
+	Contest,
+	sequelize,
+} = require("../models");
 
 const { Worker } = require("worker_threads");
 
@@ -88,37 +94,77 @@ const deleteProblem = (req, res) => {};
 
 const submit = async (req, res) => {
 	try {
-		// const { code, language, time, problemId } = req.body;
-		// if (!code || !language || !time)
-		// 	return res.send({ error: "Data Insufficnent." });
+		const problemId = req.params.id;
+		const { code, language } = req.body;
+		if (!code || !language || !problemId)
+			return res.send({ error: "Data Insufficnent." });
 
-		// const problemStatus = await Problem.findOne({
-		// 	where: { id: problemId },
-		// 	attributes: {
-		// 		include: ["status"],
-		// 	},
-		// });
+		const problemObject = await Problem.findOne({
+			where: { id: problemId },
+			attributes: [
+				"status",
+				"checker",
+				"checkerLang",
+				"testcase",
+				"point",
+				"contestId",
+				[sequelize.col("Contest.start"), "start"],
+			],
+			include: [
+				{
+					model: Contest,
+					attributes: [],
+				},
+			],
+		});
 
-		// if (!problemStatus || problemStatus === "HIDDEN")
-		// 	return res.send({ error: "Problem not found!" });
+		if (!problemObject || problemObject.dataValues.status === "HIDDEN")
+			return res.send({ error: "Problem not found!" });
 
-		// const inContest = problemStatus === "LIVE";
+		const {
+			start,
+			status,
+			contestId,
+			testcase,
+			checker,
+			checkerLang,
+			point,
+		} = problemObject.dataValues;
+		const inContest = status === "LIVE";
+		const currentTime = new Date().getTime();
+		const startTime = new Date(start).getTime();
+		const time = Math.floor((currentTime - startTime) / 1000);
 
-		// const solution = await Solution.create({
-		// 	language,
-		// 	code,
-		// 	time,
-		// 	inContest,
-		// 	status: "PENDING",
-		// 	ProblemId: problemId,
-		// 	UserId: req.user.id,
-		// });
-		const solution = req.query.solution;
+		const solutionObject = await Solution.create({
+			language,
+			code,
+			time,
+			inContest,
+			status: "PENDING",
+			ProblemId: problemId,
+			UserId: req.user.id,
+		});
 		res.send({ data: "ok" });
+
+		const solution = {
+			id: solutionObject.id,
+			code: solutionObject.code,
+			language: solutionObject.language,
+			testcase,
+			checker,
+			checkerLang,
+			inContest,
+			problemId,
+			time,
+			point,
+			userId: req.user.id,
+			contestId,
+		};
 
 		const checkWorker = new Worker("./utils/checkWorker.js");
 		checkWorker.postMessage(solution);
 	} catch (error) {
+		console.log(error);
 		res.send({ error });
 	}
 };
