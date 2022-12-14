@@ -14,7 +14,7 @@ const problemRoute = require("./routes/problem");
 
 const db = require("./models");
 
-const { checkLogin, checkAdmin } = require("./middlewares/auth");
+const { checkAdmin } = require("./middlewares/auth");
 require("./utils/auth");
 
 const app = express();

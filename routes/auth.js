@@ -1,4 +1,5 @@
 const passport = require("passport");
+const { checkLogin } = require("../middlewares/auth");
 
 const router = require("express").Router();
 const CLIENT_URL = "/";
@@ -24,7 +25,7 @@ router.get(
 // 	res.json({ error: "Failed to login." });
 // });
 
-router.get("/user", (req, res) => {
+router.get("/user", checkLogin, (req, res) => {
 	res.send(req.user);
 });
 
