@@ -35,11 +35,15 @@ const checkSolution = async solution => {
 		}
 
 		const checkerTestCase = solution.testcase + output;
-		const isCorrect = await runCode(
+		const checkerResult = await runCode(
 			solution.checker,
 			solution.checkerlang,
 			checkerTestCase
 		);
+
+		var isCorrect = false;
+		if (checkerResult.status && checkerResult.output === 1)
+			isCorrect = true;
 
 		var status = isCorrect ? "ACCEPTED" : "WRONG";
 		if (!solution.inContest) {
