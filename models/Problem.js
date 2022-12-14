@@ -12,7 +12,15 @@ module.exports = (sequalize, DataTypes) => {
 			allowNull: false,
 		},
 		checker: {
-			type: DataTypes.TEXT,
+			type: DataTypes.ENUM(
+				"java",
+				"py",
+				"cpp",
+				"c",
+				"go",
+				"cs",
+				"js"
+			),
 			allowNull: false,
 		},
 		checkerLang: {

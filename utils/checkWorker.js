@@ -42,7 +42,9 @@ const checkSolution = async solution => {
 		);
 
 		var isCorrect = false;
-		if (checkerResult.status && checkerResult.output === 1)
+		console.log(checkerResult);
+		return;
+		if (checkerResult.data.status && checkerResult.data.output === 1)
 			isCorrect = true;
 
 		var status = isCorrect ? "ACCEPTED" : "WRONG";

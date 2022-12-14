@@ -91,10 +91,29 @@ db.sequelize.sync().then(() => {
 		const adminBro = new AdminBro({
 			rootPath: "/admin",
 			resources: [
-				{ resource: db.Contest },
-				{ resource: db.Problem },
-				{ resource: db.User },
-				{ resource: db.Register },
+				{
+					resource: db.Contest,
+					options: {
+						properties: {
+							description: {
+								type: "textarea",
+							},
+						},
+					},
+				},
+				{
+					resource: db.Problem,
+					options: {
+						properties: {
+							description: {
+								type: "textarea",
+							},
+							checker: {
+								type: "textarea",
+							},
+						},
+					},
+				},
 				{ resource: db.Solution },
 			],
 			branding: {
