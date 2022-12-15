@@ -7,6 +7,7 @@ const {
 	sequelize,
 } = require("../models");
 const { Op } = Sequelize;
+const moment = require("moment");
 
 const addContest = (req, res) => {};
 
@@ -51,8 +52,8 @@ const getContest = async (req, res) => {
 		if (!contest) return res.send({ error: "Contest not found!" });
 
 		const now = new Date();
-		contest.dataValues.started =
-			now >= contest.start && now <= contest.end;
+		contest.dataValues.started = now >= contest.start;
+		contest.dataValues.ended = now >= contest.end;
 
 		const registration = await Register.count({
 			where: {
@@ -62,14 +63,17 @@ const getContest = async (req, res) => {
 		});
 
 		contest.dataValues.registered = !!registration;
+		if (contest.dataValues.started === false) {
+			return res.send({ data: contest });
+		}
 
 		if (
-			!contest.dataValues.registered ||
-			!contest.dataValues.started
+			contest.dataValues.started === true &&
+			contest.dataValues.ended === false &&
+			contest.dataValues.registered === false
 		) {
 			return res.send({ data: contest });
 		}
-		console.log("reached");
 
 		const problems = await Problem.findAll({
 			where: {
@@ -84,6 +88,7 @@ const getContest = async (req, res) => {
 		contest.dataValues.Problems = problems;
 		res.send({ data: contest });
 	} catch (error) {
+		console.log(error);
 		res.send({ error });
 	}
 };
