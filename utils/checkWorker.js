@@ -34,17 +34,22 @@ const checkSolution = async solution => {
 			return;
 		}
 
+		console.log(solution.checkerLang);
+
 		const checkerTestCase = solution.testcase + output;
 		const checkerResult = await runCode(
 			solution.checker,
-			solution.checkerlang,
+			solution.checkerLang,
 			checkerTestCase
 		);
 
 		var isCorrect = false;
-		console.log(checkerResult);
-		return;
-		if (checkerResult.data.status && checkerResult.data.output === 1)
+
+		if (
+			checkerResult.result.success &&
+			(checkerResult.result.output === "1" ||
+				checkerResult.result.output === "1\n")
+		)
 			isCorrect = true;
 
 		var status = isCorrect ? "ACCEPTED" : "WRONG";

@@ -11,6 +11,7 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const contestRoute = require("./routes/contest");
 const problemRoute = require("./routes/problem");
+const blogRoute = require("./routes/blog");
 
 const db = require("./models");
 
@@ -44,7 +45,7 @@ app.use("/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/contests", contestRoute);
 app.use("/api/problems", problemRoute);
-// app.use("/sollutions", sollutionRoute);
+app.use("/api/blogs", blogRoute);
 
 app.get("/api/leaderboard", async (req, res) => {
 	try {
@@ -114,7 +115,28 @@ db.sequelize.sync().then(() => {
 						},
 					},
 				},
-				{ resource: db.Solution },
+				{
+					resource: db.Solution,
+					options: {
+						properties: {
+							code: {
+								type: "textarea",
+							},
+						},
+					},
+				},
+				{
+					resource: db.Blog,
+					options: {
+						properties: {
+							content: {
+								type: "textarea",
+							},
+						},
+					},
+				},
+				{ resource: db.User },
+				{ resource: db.Register },
 			],
 			branding: {
 				companyName: "Four Space",
