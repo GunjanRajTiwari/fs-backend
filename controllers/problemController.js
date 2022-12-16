@@ -79,6 +79,7 @@ const getProblem = async (req, res) => {
 				ProblemId: problem.id,
 				UserId: req.user.id,
 			},
+			order: [["createdAt", "DESC"]],
 		});
 		problem.dataValues.solutions = solutions;
 
