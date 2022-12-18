@@ -114,9 +114,9 @@ const register = async (req, res) => {
 			},
 		});
 
-		if (contest.start <= new Date())
+		if (contest.end <= new Date())
 			return res.send({
-				error: "Cant register after the contest has started.",
+				error: "Cant register after the contest has ended.",
 			});
 
 		await Register.create({
