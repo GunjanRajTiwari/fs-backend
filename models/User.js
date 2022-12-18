@@ -28,11 +28,11 @@ module.exports = (sequalize, DataTypes) => {
 				"GRANDMASTER",
 				"LEGENDARY"
 			),
-			defaultValue: "ELITE",
+			defaultValue: "ROOKIE",
 		},
 		rating: {
 			type: DataTypes.INTEGER,
-			defaultValue: 1500,
+			defaultValue: 500,
 		},
 	});
 

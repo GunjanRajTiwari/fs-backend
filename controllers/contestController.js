@@ -102,6 +102,7 @@ const addProblem = (req, res) => {};
 const getProblems = (req, res) => {};
 
 const register = async (req, res) => {
+	console.log("registered");
 	const contestId = req.params.id;
 	try {
 		const contest = await Contest.findOne({
@@ -124,7 +125,7 @@ const register = async (req, res) => {
 		});
 		res.send({ data: "ok" });
 	} catch (error) {
-		res.send({ error });
+		res.send({ error: " Something went wrong" });
 	}
 };
 
