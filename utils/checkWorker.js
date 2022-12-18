@@ -95,15 +95,16 @@ const checkSolution = async solution => {
 			);
 
 			var submissionTime = solution.time;
-			var notFirst = await Solution.count({
+			var first = await Solution.count({
 				where: {
 					UserId: solution.userId,
 					ProblemId: solution.problemId,
 					status: "ACCEPTED",
 				},
 			});
-			if (!notFirst) {
-				await Register.update(
+			console.log(first);
+			if (first === 1) {
+				const updated = await Register.update(
 					{
 						solved: Sequelize.literal("solved + 1"),
 						submission: sequelize.literal(
@@ -125,6 +126,7 @@ const checkSolution = async solution => {
 						},
 					}
 				);
+				console.log(updated);
 			}
 		});
 	} catch (e) {
