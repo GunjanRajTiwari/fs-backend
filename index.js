@@ -112,6 +112,9 @@ db.sequelize.sync().then(() => {
 							checker: {
 								type: "textarea",
 							},
+							testcase: {
+								type: "textarea",
+							},
 						},
 					},
 				},

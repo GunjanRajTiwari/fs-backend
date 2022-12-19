@@ -34,7 +34,7 @@ const checkSolution = async solution => {
 			return;
 		}
 
-		console.log(solution.checkerLang);
+		// console.log(solution.checkerLang);
 
 		const checkerTestCase = solution.testcase + output;
 		const checkerResult = await runCode(
@@ -42,6 +42,7 @@ const checkSolution = async solution => {
 			solution.checkerLang,
 			checkerTestCase
 		);
+		// console.log(checkerResult);
 
 		var isCorrect = false;
 
@@ -126,7 +127,7 @@ const checkSolution = async solution => {
 						},
 					}
 				);
-				console.log(updated);
+				// console.log(updated);
 			}
 		});
 	} catch (e) {
