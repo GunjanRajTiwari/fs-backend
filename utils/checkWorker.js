@@ -33,7 +33,6 @@ const checkSolution = async solution => {
 			);
 			return;
 		}
-
 		// console.log(solution.checkerLang);
 
 		const checkerTestCase = solution.testcase + output;
