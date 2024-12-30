@@ -83,75 +83,78 @@ app.get("/api/leaderboard", async (req, res) => {
 });
 
 const port = process.env.PORT || 8080;
-db.sequelize.sync().then(() => {
-	console.log("Database synced ...");
-	app.listen(port, () => {
-		console.log("Server running ...");
+db.sequelize
+	.sync()
+	.then(() => {
+		console.log("Database synced ...");
+		app.listen(port, () => {
+			console.log("Server running ...");
 
-		AdminBro.registerAdapter(AdminBroSequelize);
-		const adminBro = new AdminBro({
-			rootPath: "/admin",
-			resources: [
-				{
-					resource: db.Contest,
-					options: {
-						properties: {
-							description: {
-								type: "textarea",
+			AdminBro.registerAdapter(AdminBroSequelize);
+			const adminBro = new AdminBro({
+				rootPath: "/admin",
+				resources: [
+					{
+						resource: db.Contest,
+						options: {
+							properties: {
+								description: {
+									type: "textarea",
+								},
 							},
 						},
 					},
-				},
-				{
-					resource: db.Problem,
-					options: {
-						properties: {
-							description: {
-								type: "textarea",
-							},
-							checker: {
-								type: "textarea",
-							},
-							testcase: {
-								type: "textarea",
-							},
-						},
-					},
-				},
-				{
-					resource: db.Solution,
-					options: {
-						properties: {
-							code: {
-								type: "textarea",
+					{
+						resource: db.Problem,
+						options: {
+							properties: {
+								description: {
+									type: "textarea",
+								},
+								checker: {
+									type: "textarea",
+								},
+								testcase: {
+									type: "textarea",
+								},
 							},
 						},
 					},
-				},
-				{
-					resource: db.Blog,
-					options: {
-						properties: {
-							content: {
-								type: "textarea",
+					{
+						resource: db.Solution,
+						options: {
+							properties: {
+								code: {
+									type: "textarea",
+								},
 							},
 						},
 					},
+					{
+						resource: db.Blog,
+						options: {
+							properties: {
+								content: {
+									type: "textarea",
+								},
+							},
+						},
+					},
+					{ resource: db.User },
+					{ resource: db.Register },
+				],
+				branding: {
+					companyName: "Four Space",
+					logo: "/logo.png",
 				},
-				{ resource: db.User },
-				{ resource: db.Register },
-			],
-			branding: {
-				companyName: "Four Space",
-				logo: "/logo.png",
-			},
+			});
+
+			const adminRouter = AdminBroExpress.buildRouter(adminBro);
+
+			app.use(adminBro.options.rootPath, checkAdmin, adminRouter);
+			app.get("/*", (req, res) => {
+				res.sendFile(path.join(__dirname, "build", "index.html"));
+			});
 		});
-
-		const adminRouter = AdminBroExpress.buildRouter(adminBro);
-
-		app.use(adminBro.options.rootPath, checkAdmin, adminRouter);
-		app.get("/*", (req, res) => {
-			res.sendFile(path.join(__dirname, "build", "index.html"));
-		});
-	});
-});
+	})
+	.catch(e => console.log(e));
